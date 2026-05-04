@@ -33,4 +33,16 @@ jobs:
           ZAIMANHUA_COOKIE_3: ${{ secrets.ZAIMANHUA_COOKIE_3 }}
           ZAIMANHUA_COOKIE_4: ${{ secrets.ZAIMANHUA_COOKIE_4 }}
           ZAIMANHUA_COOKIE_5: ${{ secrets.ZAIMANHUA_COOKIE_5 }}
+          ZAIMANHUA_USERNAME: ${{ secrets.ZAIMANHUA_USERNAME }}
+          ZAIMANHUA_PASSWORD: ${{ secrets.ZAIMANHUA_PASSWORD }}
+          ZAIMANHUA_USERNAME_1: ${{ secrets.ZAIMANHUA_USERNAME_1 }}
+          ZAIMANHUA_PASSWORD_1: ${{ secrets.ZAIMANHUA_PASSWORD_1 }}
+          ZAIMANHUA_USERNAME_2: ${{ secrets.ZAIMANHUA_USERNAME_2 }}
+          ZAIMANHUA_PASSWORD_2: ${{ secrets.ZAIMANHUA_PASSWORD_2 }}
+          ZAIMANHUA_USERNAME_3: ${{ secrets.ZAIMANHUA_USERNAME_3 }}
+          ZAIMANHUA_PASSWORD_3: ${{ secrets.ZAIMANHUA_PASSWORD_3 }}
+          ZAIMANHUA_USERNAME_4: ${{ secrets.ZAIMANHUA_USERNAME_4 }}
+          ZAIMANHUA_PASSWORD_4: ${{ secrets.ZAIMANHUA_PASSWORD_4 }}
+          ZAIMANHUA_USERNAME_5: ${{ secrets.ZAIMANHUA_USERNAME_5 }}
+          ZAIMANHUA_PASSWORD_5: ${{ secrets.ZAIMANHUA_PASSWORD_5 }}
         run: python src/auto_read.py
