@@ -367,17 +367,26 @@ def main():
         return False
 
     all_success = True
-    for account_name, cookie_str in cookies_list:
+    for index, (account_name, cookie_str) in enumerate(cookies_list):
         print(f"\n{'=' * 50}")
         print(f"账号: {account_name}")
         print("=" * 50)
 
-        is_valid, error_msg = validate_cookie(cookie_str)
-        if not is_valid:
-            print(f"  [ERROR] Cookie 无效: {error_msg}")
-            print(f"  请更新 {account_name} 的 Cookie")
+        # 验证 Cookie 有效性，如果失效尝试自动登录
+        # 使用对应的账号索引获取对应的多账号凭据
+        from auto_login import get_valid_cookie
+        valid_cookie, is_auto_login = get_valid_cookie(cookie_str, account_name, account_index=index if index > 0 else None)
+        
+        if not valid_cookie:
+            print(f"  [ERROR] 无法获取有效Cookie")
             all_success = False
             continue
+        
+        if is_auto_login:
+            print(f"  [v] 使用自动登录获取的新Cookie")
+            cookie_str = valid_cookie
+        else:
+            print(f"  [v] 使用配置的Cookie")
 
         success = run_yuanchuang(cookie_str, account_name)
         if not success:

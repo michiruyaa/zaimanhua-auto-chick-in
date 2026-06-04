@@ -25,14 +25,18 @@ def _make_account_label(default_label, cookie_str):
 
 
 def get_all_cookies():
-    """获取所有账号的 Cookie"""
+    """获取所有账号的 Cookie
+    
+    如果未配置Cookie但配置了自动登录凭据，返回空字符串占位符
+    以便触发自动登录备用方案
+    """
     load_dotenv()  # 自动加载 .env 文件（本地测试用）
 
     cookies_list = []
 
     # 兼容单账号配置
     single = os.environ.get('ZAIMANHUA_COOKIE')
-    if single:
+    if single and single.strip():
         label = _make_account_label('默认账号', single)
         cookies_list.append((label, single))
 
@@ -40,13 +44,41 @@ def get_all_cookies():
     i = 1
     while True:
         cookie = os.environ.get(f'ZAIMANHUA_COOKIE_{i}')
-        if cookie:
+        if cookie and cookie.strip():
             label = _make_account_label(f'账号 {i}', cookie)
             cookies_list.append((label, cookie))
             i += 1
         else:
             break
-
+    
+    # 如果没有配置Cookie，检查是否配置了自动登录凭据
+    if not cookies_list:
+        username = os.environ.get('ZAIMANHUA_USERNAME')
+        password = os.environ.get('ZAIMANHUA_PASSWORD')
+        if username and username.strip() and password and password.strip():
+            # 返回空Cookie占位符，触发自动登录
+            cookies_list.append(('默认账号', ''))
+    
+    # 检查多账号的自动登录凭据
+    # 先找到最大的索引号
+    max_index = 0
+    for key in os.environ.keys():
+        if key.startswith('ZAIMANHUA_USERNAME_'):
+            try:
+                index = int(key.split('_')[-1])
+                max_index = max(max_index, index)
+            except ValueError:
+                continue
+    
+    # 根据最大索引遍历
+    for i in range(1, max_index + 1):
+        username = os.environ.get(f'ZAIMANHUA_USERNAME_{i}')
+        password = os.environ.get(f'ZAIMANHUA_PASSWORD_{i}')
+        if username and username.strip() and password and password.strip():
+            # 检查是否已经有对应索引的Cookie
+            if i >= len(cookies_list):
+                cookies_list.append((f'账号 {i}', ''))
+    
     return cookies_list
 
 
@@ -256,19 +288,26 @@ def main():
     print(f"共发现 {len(cookies_list)} 个账号")
 
     all_success = True
-    for name, cookie_str in cookies_list:
+    for index, (name, cookie_str) in enumerate(cookies_list):
         print(f"\n{'='*40}")
         print(f"正在签到: {name}")
         print('='*40)
 
-        # 验证 Cookie 有效性
-        from utils import validate_cookie
-        is_valid, error_msg = validate_cookie(cookie_str)
-        if not is_valid:
-            print(f"[ERROR] Cookie 无效: {error_msg}")
-            print(f"请更新 {name} 的 Cookie")
+        # 验证 Cookie 有效性，如果失效尝试自动登录
+        # 使用对应的账号索引获取对应的多账号凭据
+        from auto_login import get_valid_cookie
+        valid_cookie, is_auto_login = get_valid_cookie(cookie_str, name, account_index=index if index > 0 else None)
+        
+        if not valid_cookie:
+            print(f"[ERROR] 无法获取有效Cookie")
             all_success = False
             continue
+        
+        if is_auto_login:
+            print(f"  [v] 使用自动登录获取的新Cookie")
+            cookie_str = valid_cookie
+        else:
+            print(f"  [v] 使用配置的Cookie")
 
         success = checkin(cookie_str)
         if success:

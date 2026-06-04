@@ -194,18 +194,25 @@ def run_auto_read():
         print("未发现 Cookie 记录。" )
         return False
         
-    for label, cookie_str in cookies_list:
+    for index, (label, cookie_str) in enumerate(cookies_list):
         print(f"\n{'='*60}")
         print(f"账号: {label}")
         print(f"{'='*60}")
 
-        # 验证 Cookie 有效性
-        from utils import validate_cookie
-        is_valid, error_msg = validate_cookie(cookie_str)
-        if not is_valid:
-            print(f"[ERROR] Cookie 无效: {error_msg}")
-            print(f"请更新 {label} 的 Cookie")
+        # 验证 Cookie 有效性，如果失效尝试自动登录
+        # 使用对应的账号索引获取对应的多账号凭据
+        from auto_login import get_valid_cookie
+        valid_cookie, is_auto_login = get_valid_cookie(cookie_str, label, account_index=index if index > 0 else None)
+        
+        if not valid_cookie:
+            print(f"[ERROR] 无法获取有效Cookie")
             continue
+        
+        if is_auto_login:
+            print(f"  [v] 使用自动登录获取的新Cookie")
+            cookie_str = valid_cookie
+        else:
+            print(f"  [v] 使用配置的Cookie")
 
         reader = ZaimanhuaAppReader(cookie_str, debug=args.debug)
         token = reader.get_token()
