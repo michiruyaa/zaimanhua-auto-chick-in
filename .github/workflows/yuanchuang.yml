@@ -2,8 +2,8 @@ name: Yuanchuang Activity
 
 on:
   schedule:
-    # 北京时间 11:30 (UTC 3:30)，每天一次
-    - cron: '30 3 * * *'
+    # 北京时间 15:30 (UTC 7:30)，每天一次
+    - cron: '30 7 * * *'
   workflow_dispatch:
 
 jobs:
@@ -33,4 +33,16 @@ jobs:
           ZAIMANHUA_COOKIE_3: ${{ secrets.ZAIMANHUA_COOKIE_3 }}
           ZAIMANHUA_COOKIE_4: ${{ secrets.ZAIMANHUA_COOKIE_4 }}
           ZAIMANHUA_COOKIE_5: ${{ secrets.ZAIMANHUA_COOKIE_5 }}
+          ZAIMANHUA_USERNAME: ${{ secrets.ZAIMANHUA_USERNAME }}
+          ZAIMANHUA_PASSWORD: ${{ secrets.ZAIMANHUA_PASSWORD }}
+          ZAIMANHUA_USERNAME_1: ${{ secrets.ZAIMANHUA_USERNAME_1 }}
+          ZAIMANHUA_PASSWORD_1: ${{ secrets.ZAIMANHUA_PASSWORD_1 }}
+          ZAIMANHUA_USERNAME_2: ${{ secrets.ZAIMANHUA_USERNAME_2 }}
+          ZAIMANHUA_PASSWORD_2: ${{ secrets.ZAIMANHUA_PASSWORD_2 }}
+          ZAIMANHUA_USERNAME_3: ${{ secrets.ZAIMANHUA_USERNAME_3 }}
+          ZAIMANHUA_PASSWORD_3: ${{ secrets.ZAIMANHUA_PASSWORD_3 }}
+          ZAIMANHUA_USERNAME_4: ${{ secrets.ZAIMANHUA_USERNAME_4 }}
+          ZAIMANHUA_PASSWORD_4: ${{ secrets.ZAIMANHUA_PASSWORD_4 }}
+          ZAIMANHUA_USERNAME_5: ${{ secrets.ZAIMANHUA_USERNAME_5 }}
+          ZAIMANHUA_PASSWORD_5: ${{ secrets.ZAIMANHUA_PASSWORD_5 }}
         run: python src/yuanchuang.py
