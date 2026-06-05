@@ -255,7 +255,7 @@ def run_comment(cookie_str, bind_phone=None):
                     if verify_attempt < max_verify_retries - 1:
                         print(f"  [!] 评论任务未完成 (status=1)，可能评论未发送成功，准备重新评论...")
                         # 重新发表评论
-                        comment_result = post_daily_comment(cookie_str)
+                        comment_result = post_daily_comment(cookie_str, bind_phone=bind_phone)
                         if comment_result:
                             print(f"  [v] 重新评论完成，等待服务器同步...")
                             time.sleep(5)
