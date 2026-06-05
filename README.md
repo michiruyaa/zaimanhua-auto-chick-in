@@ -49,11 +49,12 @@
 | `ZAIMANHUA_USERNAME_4` / `ZAIMANHUA_PASSWORD_4` | 账号 4 |
 | `ZAIMANHUA_USERNAME_5` / `ZAIMANHUA_PASSWORD_5` | 账号 5 |
 
-> 支持的工作流：Zaimanhua Auto Check-in
-> Daily Comment plus
-> Daily Watch
-> Yuanchuang Activity
-> 51 Lottery Activity（活动已结束）
+> 支持的工作流：
+> - Zaimanhua Auto Check-in
+> - Daily Comment plus
+> - Daily Watch
+> - Yuanchuang Activity
+> - 51 Lottery Activity（活动已结束）
 
 ### 方式二：手动配置 Cookie
 
