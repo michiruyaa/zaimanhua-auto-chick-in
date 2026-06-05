@@ -31,6 +31,18 @@ COMMENTS = [
 ]
 
 
+def mask_phone(phone):
+    """对手机号进行打码处理，不暴露任何数字"""
+    if phone is None:
+        return None
+    # 如果 phone 不是字符串，转为字符串
+    phone_str = str(phone)
+    # 只要不是空字符串，就返回 ***
+    if phone_str.strip():
+        return "***"
+    return phone_str
+
+
 def get_commented_comics():
     """获取已评论的漫画ID列表"""
     try:
@@ -104,14 +116,14 @@ def post_daily_comment(page, cookie_str, bind_phone=None):
     # 检查手机绑定：优先使用API登录返回的bind_phone
     if bind_phone is not None:
         phone_bound = bind_phone and str(bind_phone) not in ['0', '', 'None', 'False']
-        print(f"使用API登录返回的手机号: bind_phone={bind_phone}")
+        print(f"使用API登录返回的手机号: bind_phone={mask_phone(bind_phone)}")
     else:
         phone_bound = user_info.get('bind_phone')
         phone_bound = phone_bound and str(phone_bound) not in ['0', '', 'None', 'False']
-        print(f"从Cookie中提取的手机号: bind_phone={user_info.get('bind_phone')}")
+        print(f"从Cookie中提取的手机号: bind_phone={mask_phone(user_info.get('bind_phone'))}")
     
     if not phone_bound:
-        print(f"警告: 检测到当前账号未绑定手机号 (bind_phone={bind_phone or user_info.get('bind_phone')})")
+        print(f"警告: 检测到当前账号未绑定手机号 (bind_phone={mask_phone(bind_phone or user_info.get('bind_phone'))})")
         print("注意: 未绑定手机号的账号无法完成评论任务。为了避免工作流失败，将跳过此任务。")
         return True
 
@@ -123,12 +135,12 @@ def post_daily_comment(page, cookie_str, bind_phone=None):
         # 移动端随机漫画尝试（失败自动换一部）
         max_comic_attempts = 10
         for comic_attempt in range(max_comic_attempts):
-            # 优先选择未评论过的漫画ID（4~85654）
-            comic_id = str(random.randint(4, 85654))
+            # 优先选择未评论过的漫画ID（4~86783）
+            comic_id = str(random.randint(4, 86783))
             for _ in range(30):  # 最多尝试30次找未评论的
                 if comic_id not in commented_comics:
                     break
-                comic_id = str(random.randint(4, 85654))
+                comic_id = str(random.randint(4, 86783))
             
             print(f"随机选择漫画ID: {comic_id} (尝试 {comic_attempt + 1}/{max_comic_attempts})")
             comic_url = f"https://m.zaimanhua.com/pages/comic/detail?id={comic_id}"
@@ -412,7 +424,7 @@ def main():
         if isinstance(user_info, dict):
             bind_phone = user_info.get('bind_phone')
             if bind_phone:
-                print(f"  [v] 获取到绑定手机号: {bind_phone}")
+                print(f"  [v] 获取到绑定手机号: {mask_phone(bind_phone)}")
             else:
                 print(f"  [!] 未获取到绑定手机号")
 
