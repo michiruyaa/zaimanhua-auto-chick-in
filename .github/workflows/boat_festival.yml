@@ -1,0 +1,45 @@
+name: Boat Festival Lottery Activity
+
+on:
+  workflow_dispatch:
+
+jobs:
+  boat-festival-lottery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright requests python-dotenv
+          playwright install chromium
+
+      - name: Run boat festival lottery activity
+        env:
+          ZAIMANHUA_COOKIE: ${{ secrets.ZAIMANHUA_COOKIE }}
+          ZAIMANHUA_COOKIE_1: ${{ secrets.ZAIMANHUA_COOKIE_1 }}
+          ZAIMANHUA_COOKIE_2: ${{ secrets.ZAIMANHUA_COOKIE_2 }}
+          ZAIMANHUA_COOKIE_3: ${{ secrets.ZAIMANHUA_COOKIE_3 }}
+          ZAIMANHUA_COOKIE_4: ${{ secrets.ZAIMANHUA_COOKIE_4 }}
+          ZAIMANHUA_COOKIE_5: ${{ secrets.ZAIMANHUA_COOKIE_5 }}
+          ZAIMANHUA_USERNAME: ${{ secrets.ZAIMANHUA_USERNAME }}
+          ZAIMANHUA_PASSWORD: ${{ secrets.ZAIMANHUA_PASSWORD }}
+          ZAIMANHUA_USERNAME_1: ${{ secrets.ZAIMANHUA_USERNAME_1 }}
+          ZAIMANHUA_PASSWORD_1: ${{ secrets.ZAIMANHUA_PASSWORD_1 }}
+          ZAIMANHUA_USERNAME_2: ${{ secrets.ZAIMANHUA_USERNAME_2 }}
+          ZAIMANHUA_PASSWORD_2: ${{ secrets.ZAIMANHUA_PASSWORD_2 }}
+          ZAIMANHUA_USERNAME_3: ${{ secrets.ZAIMANHUA_USERNAME_3 }}
+          ZAIMANHUA_PASSWORD_3: ${{ secrets.ZAIMANHUA_PASSWORD_3 }}
+          ZAIMANHUA_USERNAME_4: ${{ secrets.ZAIMANHUA_USERNAME_4 }}
+          ZAIMANHUA_PASSWORD_4: ${{ secrets.ZAIMANHUA_PASSWORD_4 }}
+          ZAIMANHUA_USERNAME_5: ${{ secrets.ZAIMANHUA_USERNAME_5 }}
+          ZAIMANHUA_PASSWORD_5: ${{ secrets.ZAIMANHUA_PASSWORD_5 }}
+        run: python src/boat_festival.py
