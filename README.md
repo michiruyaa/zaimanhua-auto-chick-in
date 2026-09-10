@@ -22,13 +22,11 @@
 
 | 功能 | 对应工作流 | 说明 |
 |-----|-----------|------|
-| 开学季漫画推荐抽奖必得vip会员 | School Season Lottery | 自动完成分享/阅读/评论任务并抽奖 |
+| 教师节漫画推荐抽奖必得vip会员 | Teachers Day Lottery | 自动完成分享/阅读/评论任务并抽奖 |
 
-> 活动页面: https://activity.zaimanhua.com/school-season/?source=m
+> 活动页面: https://activity.zaimanhua.com/teachers-day/
 >
-> 阅读/评论任务使用开学季专题漫画: https://zt.zaimanhua.com/details?id=601
->
-> 活动截止: 北京时间 2026-08-31 24:00
+> 活动截止: 北京时间 2026-09-13 24:00
 
 ## 配置 GitHub Secret
 
@@ -52,7 +50,7 @@
 > - Zaimanhua Auto Check-in
 > - Daily Comment plus
 > - Daily Watch
-> - School Season Lottery
+> - Teachers Day Lottery
 
 ### 方式二：手动配置 Cookie
 
