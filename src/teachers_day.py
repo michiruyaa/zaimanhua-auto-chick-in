@@ -152,23 +152,35 @@ def do_share_task(token):
     return False
 
 
-def do_comment_task(token):
+def do_comment_task(token, max_attempts=None):
     comics = get_topic_comics(TOPIC_ID)
     if not comics:
         print("  未获取到专题漫画列表，无法生成评论内容")
         return False
 
-    comic = random.choice(comics)
-    content = comic["name"]
-    print(f"  随机选中漫画: {content} (ID: {comic['id']})")
+    # 打乱顺序，逐本尝试；若某标题含不和谐词汇被拒，自动更换下一本重试
+    candidates = comics[:]
+    random.shuffle(candidates)
+    if max_attempts is not None:
+        candidates = candidates[:max_attempts]
+    total = len(candidates)
 
-    result = api_post(token, "/draw/add_comment", {"con": content, "source": 2})
-    if not result:
-        return False
-    if result.get("errno") == 0:
-        print(f"  [v] 评论发送成功! 内容: {content}")
-        return True
-    print(f"  评论任务失败: {result.get('errmsg', '')}")
+    for idx, comic in enumerate(candidates, 1):
+        content = comic["name"]
+        print(f"  [第 {idx}/{total} 次] 随机选中漫画: {content} (ID: {comic['id']})")
+
+        result = api_post(token, "/draw/add_comment", {"con": content, "source": 2})
+        if result and result.get("errno") == 0:
+            print(f"  [v] 评论发送成功! 内容: {content}")
+            return True
+
+        errmsg = result.get("errmsg", "") if result else "无响应/请求异常"
+        print(f"  评论失败: {errmsg}")
+        if idx < total:
+            print("  自动更换评论内容重试...")
+            time.sleep(1)
+
+    print(f"  已尝试 {total} 个漫画标题，评论任务仍未成功")
     return False
 
 
